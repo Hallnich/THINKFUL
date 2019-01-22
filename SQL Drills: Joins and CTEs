@@ -1,0 +1,28 @@
+##### QUESTION 1
+
+WITH 
+with_rain
+AS(
+	SELECT
+	DATE(date) rain_date,
+	weather.zip,
+	weather.events
+FROM
+	weather 
+WHERE 
+	events = 'Rain'
+)
+SELECT 
+	trips.trip_id,
+	trips.duration,
+	DATE(trips.start_date) 
+FROM
+	trips 
+JOIN
+	with_rain
+ON	DATE(trips.start_date)= with_rain.rain_date
+ORDER BY duration DESC
+LIMIT 3
+
+##### QUESTION 2
+
