@@ -51,3 +51,34 @@ JOIN
 ON stations.name = trips.start_station
 GROUP BY start_station, dockcount
 ORDER BY dockcount DESC
+
+##### QUESTION 4
+
+WITH
+rain_days
+	AS(
+		SELECT 
+			DATE(date) rain_date
+		FROM 
+			weather
+		WHERE events = 'Rain'
+		GROUP BY rain_date
+),
+rain_trips
+	AS(
+		SELECT 
+			trip_id,
+			duration,
+			DATE(trips.start_date) rainy_trip_date
+		FROM
+			trips
+		JOIN rain_days
+		ON rain_days.rain_date = DATE(trips.start_date)
+		ORDER BY duration DESC
+)
+SELECT 
+	rainy_trip_date,
+	MAX(duration) max_duration
+FROM rain_trips
+GROUP BY rainy_trip_date
+ORDER BY max_duration DESC
