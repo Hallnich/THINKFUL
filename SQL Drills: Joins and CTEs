@@ -1,16 +1,15 @@
 ##### QUESTION 1
 
 WITH 
-with_rain
+raining
 AS(
-	SELECT
-	DATE(date) rain_date,
-	weather.zip,
-	weather.events
+SELECT
+	DATE(date) rain_day
 FROM
 	weather 
 WHERE 
 	events = 'Rain'
+GROUP BY 1
 )
 SELECT 
 	trips.trip_id,
@@ -19,10 +18,36 @@ SELECT
 FROM
 	trips 
 JOIN
-	with_rain
-ON	DATE(trips.start_date)= with_rain.rain_date
+	raining
+ON	DATE(trips.start_date)= raining.rain_day
 ORDER BY duration DESC
 LIMIT 3
 
+
 ##### QUESTION 2
 
+SELECT
+	status.station_id,
+	stations.name,
+	COUNT(CASE WHEN docks_available=0 then 1 END) full_station_count
+FROM 
+	status
+JOIN 
+	stations
+ON stations.station_id = status.station_id
+GROUP BY 1,2
+ORDER BY full_station_count DESC
+
+##### QUESTION 3
+
+SELECT
+	start_station,
+	dockcount,
+	COUNT(*)
+FROM
+	trips
+JOIN 
+	stations
+ON stations.name = trips.start_station
+GROUP BY start_station, dockcount
+ORDER BY dockcount DESC
