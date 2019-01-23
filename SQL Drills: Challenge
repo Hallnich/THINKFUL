@@ -1,0 +1,82 @@
+##### QUESTION 1
+
+# I can tell that the host's name is Sarah and that the listing is
+# for an entire home/apartment for $10,000
+
+SELECT * FROM sfo_listings
+ORDER BY price DESC
+LIMIT 1
+
+##### QUESTION 2
+
+# This code shows displays a list of the most reviewed neighborhoods
+
+SELECT 
+	neighbourhood,
+	SUM(number_of_reviews) total_reviews
+FROM
+	sfo_listings
+GROUP BY 1
+ORDER BY total_reviews DESC
+
+##### QUESTION 3
+
+#STILL WORKING ON CODE BELOW TO DETERMINE MOST EXPENSIVE TIME OF YEAR
+
+WITH
+listing_prices
+AS(
+SELECT
+	sfo_listings.id,
+	sfo_listings.price
+FROM 
+	sfo_listings
+	),
+  
+available_units
+AS(
+	SELECT
+		sfo_calendar.listing_id,
+		EXTRACT(MONTH FROM calender_date) month_num
+	FROM
+		sfo_calendar
+	WHERE sfo_calendar.available = 't'
+)
+
+SELECT 
+	available_units.listing_id,
+	available_units.month_num,
+	COUNT(available_units.month_num),
+	AVG(listing_prices.price) avg_cost_of_unit
+FROM available_units
+JOIN
+	listing_prices
+ON listing_prices.id = available_units.listing_id
+GROUP BY 1,2
+ORDER BY available_units.month_num DESC
+
+
+
+
+
+
+# Code below shows busiest times of year based on largest numbers of listings 
+# Most popular months in San Francisco are November, December, and January
+
+WITH
+num_monthly
+AS(
+	SELECT 
+		EXTRACT(MONTH FROM calender_date) month_num
+	FROM
+		sfo_calendar
+	WHERE available = 't'
+)
+SELECT 
+	month_num,
+	COUNT(month_num)
+FROM 
+	num_monthly
+GROUP BY month_num
+ORDER BY month_num ASC
+
