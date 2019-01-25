@@ -1,4 +1,4 @@
-##### QUESTION 1
+##### QUESTION 1 #####
 
 WITH 
 raining
@@ -24,7 +24,7 @@ ORDER BY duration DESC
 LIMIT 3
 
 
-##### QUESTION 2
+##### QUESTION 2 #####
 
 SELECT
 	status.station_id,
@@ -38,7 +38,7 @@ ON stations.station_id = status.station_id
 GROUP BY 1,2
 ORDER BY full_station_count DESC
 
-##### QUESTION 3
+##### QUESTION 3 #####
 
 SELECT
 	start_station,
@@ -52,7 +52,7 @@ ON stations.name = trips.start_station
 GROUP BY start_station, dockcount
 ORDER BY dockcount DESC
 
-##### QUESTION 4
+##### QUESTION 4 #####
 
 WITH
 rain_days
